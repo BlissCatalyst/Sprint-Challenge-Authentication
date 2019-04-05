@@ -14,6 +14,7 @@ module.exports = server => {
 async function register(req, res) {
   try {
     let newCreds = req.body;
+
     if (newCreds && newCreds.username && newCreds.password) {
       newCreds.password = bcrypt.hashSync(newCreds.password, 10);
       const [id] = await db("users").insert(newCreds);
@@ -32,17 +33,57 @@ async function register(req, res) {
         .json({ message: "You must include your creds, no free rides" });
     }
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        message: "Server wont do that right now...It hates you.",
-        error: err
-      });
+    res.status(500).json({
+      message: "Server wont do that right now...It hates you.",
+      error: err
+    });
   }
 }
 
 async function login(req, res) {
-  // implement user login
+  try {
+    const loginCreds = req.body;
+
+    if (loginCreds && loginCreds.username && loginCreds.password) {
+      const existingUser = await db("users")
+        .where({ username: loginCreds.username })
+        .first();
+      console.log(loginCreds, existingUser);
+
+      if (
+        existingUser &&
+        bcrypt.compareSync(loginCreds.password, existingUser.password)
+      ) {
+        const payload = {
+          subject: existingUser.id,
+          username: existingUser.username
+        };
+        const secret = "can't touch this";
+        const options = {
+          expiresIn: "1d"
+        };
+        const token = jwt.sign(payload, secret, options);
+
+        res.status(200).json({
+          message: `Succes! ${existingUser.username}, you are the best hacker!`,
+          token
+        });
+      } else {
+        res.status(401).json({
+          message: "Invalid Password, get out of here crappy hacker."
+        });
+      }
+    } else {
+      res
+        .status(400)
+        .json({ message: "You must include your creds, no free rides." });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message:
+        "Server won't login right now...It hates that you're trying to come back."
+    });
+  }
 }
 
 function getJokes(req, res) {
