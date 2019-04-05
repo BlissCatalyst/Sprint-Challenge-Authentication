@@ -29,9 +29,13 @@ Implement an User Authentication System in order to access the jokes from the Jo
 Demonstrate your understanding of this week's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your project manager.
 
 1. What is the purpose of using _sessions_?
+   > - To make a timeframe of how long a client is allowed to access a certain part of the server.
 1. What does bcrypt do to help us store passwords in a secure manner.
+   > - bcrypt is a library that hashes a password. We then store the hash so that no one has access to passwords.
 1. What does bcrypt do to slow down attackers?
+   > - There is no key that anyone can leak that attackers can get ahold of. Usually, people use the current date or time to make sure the hash cycles are always different. There really isn't an easy way to calculate the hash if every one is different.
 1. What are the three parts of the JSON Web Token?
+   > - The header; that contains an algorithm and a token type, the payload; which contains permissions for the user and other things like their id, and the signature; which just adds randomization to encode the payload and header together.
 
 ## Project Set Up
 
@@ -48,9 +52,9 @@ Follow these steps for completing your project:
 
 - [ ] `cd` into the root of the project and run `yarn` to install dependencies.
 - [ ] Once you have your `node_modules` go ahead and run `yarn server` or `npm run server` to start your node server.
-- [ ] Submit a Pull-Request to merge <firstName-lastName> Branch into master (student's  Repo).
+- [ ] Submit a Pull-Request to merge <firstName-lastName> Branch into master (student's Repo).
 - [ ] Add your Project Manager as a Reviewer on the Pull-request
-- [ ] PM then will count the HW as done by  merging the branch back into master.
+- [ ] PM then will count the HW as done by merging the branch back into master.
 
 Helpful Tip on Testing this Project:
 
