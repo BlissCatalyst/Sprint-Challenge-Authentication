@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require("../database/dbConfig.js");
 
-const { authenticate } = require("../auth/authenticate");
+const { authenticate, jwtKey } = require("../auth/authenticate");
 
 module.exports = server => {
   server.post("/api/register", register);
@@ -48,7 +48,6 @@ async function login(req, res) {
       const existingUser = await db("users")
         .where({ username: loginCreds.username })
         .first();
-      console.log(loginCreds, existingUser);
 
       if (
         existingUser &&
@@ -58,7 +57,7 @@ async function login(req, res) {
           subject: existingUser.id,
           username: existingUser.username
         };
-        const secret = "can't touch this";
+        const secret = jwtKey;
         const options = {
           expiresIn: "1d"
         };
